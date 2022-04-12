@@ -36,14 +36,24 @@ function FormGetNft() {
         }
     }, [email, password]);
 
-    const data = useQuery(GET_INFO, {
+    const {
+        data,
+        loading,
+        refetch,
+    } = useQuery(GET_INFO, {
         variables: {
             assetId: '655676227982332778968688736442226131714727085092',
             universeVerse: 2,
         }
     });
-    console.log('data:');
-    console.log(data);
+
+    useEffect(() => {
+        const props = data?.propByAssetIdAndUniverseVerse;
+        console.log('data:');
+        console.log(props);
+        setEmailTemplate(props.props);
+      }, [data]);
+    
 
     const createNft = async () => {
         setIsLoading(true);
