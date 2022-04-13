@@ -15,9 +15,7 @@ function FormGetAsset() {
     const [universeVerse, setUniverseVerse] = useState('');
     const [assetId, setAssetId] = useState('');
     const [assetDataTemplate, setAssetDataTemplate] = useState('');
-    const [nft, setNft] = useState(null);
     const [buttonDisabled, setButtonDisabled] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
 
@@ -47,8 +45,7 @@ function FormGetAsset() {
         }
     }
 
-    const [loadAsset, { called, loading }] = useLazyQuery(GET_INFO, {
-        variables: { assetId: assetId.toString(), universeVerse: 2 },
+    const [loadAsset, { isLoading }] = useLazyQuery(GET_INFO, {
         onError: (e) => setError(e.message),
         onCompleted: showData,
     });
@@ -69,7 +66,7 @@ function FormGetAsset() {
                     }} />
             </Form.Group>
 
-            <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => loadAsset()} data-testid="get-button">
+            <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => loadAsset({variables: { assetId: assetId.toString(), universeVerse: 2 }})} data-testid="get-button">
                 Get Asset Data
             </Button>
 
