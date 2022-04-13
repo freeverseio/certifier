@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { useLazyQuery } from '@apollo/client';
 import { GET_INFO } from '../graphql/mutations/asset';
 import Loading from './Loading';
-import EmailTemplate from './EmailTemplate';
+import AssetDataTemplate from './AssetDataTemplate';
 import ErrorDisplay from './ErrorDisplay';
 
 
@@ -14,7 +14,7 @@ function FormGetAsset() {
 
     const [universeVerse, setUniverseVerse] = useState('');
     const [assetId, setAssetId] = useState('');
-    const [emailTemplate, setEmailTemplate] = useState('Email template:');
+    const [assetDataTemplate, setAssetDataTemplate] = useState('');
     const [nft, setNft] = useState(null);
     const [buttonDisabled, setButtonDisabled] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
@@ -43,10 +43,15 @@ function FormGetAsset() {
 
     useEffect(() => {
         const props = data?.propByAssetIdAndUniverseVerse;
-        if (!props) return;
-        console.log('data:');
-        console.log(props);
-        setEmailTemplate(props.props);
+        if (props) {
+            console.log('data:');
+            console.log(data);
+            setAssetDataTemplate(props.props);
+            setError(null);
+        } else {
+            if (called) setError('No data found for this asset');
+            setAssetDataTemplate('');
+        };
       }, [data]);
     
     const seeNft = () => {
@@ -75,7 +80,7 @@ function FormGetAsset() {
 
             {isLoading && <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
-            <EmailTemplate emailTemplateValue={emailTemplate} />
+            {assetDataTemplate !== '' && <AssetDataTemplate assetDataTemplateValue={assetDataTemplate} />}
             {nft && <Button variant="primary" type="button" onClick={() => seeNft()} data-testid="see-nft-button">
                 See my new NFT
             </Button>
