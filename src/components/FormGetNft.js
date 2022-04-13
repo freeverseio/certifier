@@ -10,9 +10,6 @@ import ErrorDisplay from './ErrorDisplay';
 
 
 
-function createNewAccount() {};
-function encryptIdentity() {};
-
 function FormGetNft() {
 
     const [password, setPassword] = useState('');
@@ -49,6 +46,7 @@ function FormGetNft() {
 
     useEffect(() => {
         const props = data?.propByAssetIdAndUniverseVerse;
+        if (!props) return;
         console.log('data:');
         console.log(props);
         setEmailTemplate(props.props);
