@@ -66,7 +66,7 @@ function FormGetAsset() {
                     }} />
             </Form.Group>
 
-            <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => loadAsset({variables: { assetId: assetId.toString(), universeVerse: 2 }})} data-testid="get-button">
+            <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})} data-testid="get-button">
                 Get Asset Data
             </Button>
 
