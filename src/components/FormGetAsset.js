@@ -33,10 +33,11 @@ function FormGetAsset() {
         }
     }, [assetId, universeVerse]);
 
+    
     // variables: { assetId: '655676227982332778968688736442226131714727085092', universeVerse: 2 },
 
     const [loadAsset, { called, loading, data }] = useLazyQuery(GET_INFO, {
-            variables: { assetId: assetId, universeVerse: universeVerse },
+            variables: { assetId: assetId.toString(), universeVerse: 2 },
             onError: (e) => setError(e.message),
     });
 
