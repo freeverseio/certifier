@@ -36,27 +36,22 @@ function FormGetAsset() {
     
     // variables: { assetId: '655676227982332778968688736442226131714727085092', universeVerse: 2 },
 
-    const [loadAsset, { called, loading, data }] = useLazyQuery(GET_INFO, {
-            variables: { assetId: assetId.toString(), universeVerse: 2 },
-            onError: (e) => setError(e.message),
-    });
-
-    useEffect(() => {
+    const showData = (data) => {
         const props = data?.propByAssetIdAndUniverseVerse;
         if (props) {
-            console.log('data:');
-            console.log(data);
+            setError('');
             setAssetDataTemplate(props.props);
-            setError(null);
         } else {
-            if (called) setError('No data found for this asset');
+            setError('No data found for this asset');
             setAssetDataTemplate('');
-        };
-      }, [data]);
-    
-    const seeNft = () => {
-        window.location.href = 'https://market.staging.blackhole.gorengine.com/asset/' + nft;
+        }
     }
+
+    const [loadAsset, { called, loading }] = useLazyQuery(GET_INFO, {
+        variables: { assetId: assetId.toString(), universeVerse: 2 },
+        onError: (e) => setError(e.message),
+        onCompleted: showData,
+    });
 
     return (
         <Form>
@@ -81,11 +76,6 @@ function FormGetAsset() {
             {isLoading && <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
             {assetDataTemplate !== '' && <AssetDataTemplate assetDataTemplateValue={assetDataTemplate} />}
-            {nft && <Button variant="primary" type="button" onClick={() => seeNft()} data-testid="see-nft-button">
-                See my new NFT
-            </Button>
-            }
-
         </Form>
     );
 }
