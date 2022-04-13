@@ -1,5 +1,5 @@
 import './App.css';
-import FormGetNft from './components/FormGetNft';
+import FormGetAsset from './components/FormGetAsset';
 import Header from './components/Header';
 import Config from './Config';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,7 +24,7 @@ function App() {
       
       <Header />
       <div className="App">
-        <FormGetNft />
+        <FormGetAsset />
       </div>
     </ApolloProvider>
   );

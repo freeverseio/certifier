@@ -4,16 +4,16 @@ import {
     InMemoryCache,
     ApolloProvider,
   } from "@apollo/client";
-import FormGetNft from './FormGetNft';
+import FormGetAsset from './FormGetAsset';
 const client = new ApolloClient({
     uri: 'http://localhost:5000/graphql',
     cache: new InMemoryCache()
   });
 
-describe('FormGetNft', () => {
+describe('FormGetAsset', () => {
 
     test('should have a form with a email field', () => {
-        render(<ApolloProvider client={client}><FormGetNft/></ApolloProvider>);
+        render(<ApolloProvider client={client}><FormGetAsset/></ApolloProvider>);
         const input = screen.getByTestId('email');
         expect(input).toBeInTheDocument();
         expect(input).toHaveAttribute('type', 'email');
@@ -22,14 +22,14 @@ describe('FormGetNft', () => {
     });
 
     test('should have a form with a PASSWORD field', () => {
-        render(<ApolloProvider client={client}><FormGetNft/></ApolloProvider>);
+        render(<ApolloProvider client={client}><FormGetAsset/></ApolloProvider>);
         const input = screen.getByTestId('password');
         expect(input).toBeInTheDocument();
         expect(input).toHaveAttribute('type', 'password');
     });
 
     test('should have a button with a “Get your free NFT” text', () => {
-        render(<ApolloProvider client={client}><FormGetNft/></ApolloProvider>);
+        render(<ApolloProvider client={client}><FormGetAsset/></ApolloProvider>);
         const input = screen.getByTestId('get-button');
         expect(input).toBeInTheDocument();
         expect(input).toHaveTextContent('Get your free NFT');
@@ -37,7 +37,7 @@ describe('FormGetNft', () => {
     });
 
     test('should have a text field that displays wallet adress and private key after clicking the button', () => {
-        const utils = render(<ApolloProvider client={client}><FormGetNft/></ApolloProvider>);
+        const utils = render(<ApolloProvider client={client}><FormGetAsset/></ApolloProvider>);
         const button = screen.getByTestId('get-button');
         let emailTemplate = screen.getByTestId('email-template');
         expect(button).toBeInTheDocument();
@@ -53,7 +53,7 @@ describe('FormGetNft', () => {
     });
 
     test('should create an wallet address and private key when clicking the button', async () => {
-        const utils = render(<ApolloProvider client={client}><FormGetNft/></ApolloProvider>);
+        const utils = render(<ApolloProvider client={client}><FormGetAsset/></ApolloProvider>);
         const button = screen.getByTestId('get-button');
         expect(button).toBeInTheDocument();
         expect(button).toHaveTextContent('Get your free NFT');
@@ -67,7 +67,7 @@ describe('FormGetNft', () => {
     });
 
     test('should show an error when backend returns an error', async () => {
-        const utils = render(<ApolloProvider client={client}><FormGetNft/></ApolloProvider>);
+        const utils = render(<ApolloProvider client={client}><FormGetAsset/></ApolloProvider>);
         const button = screen.getByTestId('get-button');
         expect(button).toBeInTheDocument();
         expect(button).toHaveTextContent('Get your free NFT');
@@ -82,7 +82,7 @@ describe('FormGetNft', () => {
     });
 
     test('should have a toggle button that shows and hides the textfield', () => {
-        const utils = render(<ApolloProvider client={client}><FormGetNft/></ApolloProvider>);
+        const utils = render(<ApolloProvider client={client}><FormGetAsset/></ApolloProvider>);
         let collapseButton = screen.getByTestId('collapse-button');
         let emailTemplate = screen.getByTestId('email-template');
         
