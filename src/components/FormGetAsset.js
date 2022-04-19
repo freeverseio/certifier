@@ -38,7 +38,6 @@ function FormGetAsset() {
             loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})
         }
     }, [universeVerse]);
-
     
     // variables: { assetId: '655676227982332778968688736442226131714727085092', universeVerse: 3 },
 
@@ -49,20 +48,14 @@ function FormGetAsset() {
             const full = props.props;
             const spl =  splitStrByTrait(full, 'Charisma', 10);
             const encoded = encode(spl.preStr, spl.postStr, props.cid, props.proof);
-            const text = full + ' ' + spl.preStr + ' ' + spl.postStr + ' ' + props.cid + ' ' + props.proof + ' ' + encoded;
+            // const text = full + ' ' + spl.preStr + ' ' + spl.postStr + ' ' + props.cid + ' ' + props.proof + ' ' + encoded;
             // const text = universeIdFromAssetId(assetId);
-            setAssetDataTemplate(text);
+            setAssetDataTemplate(encoded);
         } else {
             setError('No data found for this asset');
             setAssetDataTemplate('');
         }
     }
-
-    const showVerse = (data) => {
-        setAssetDataTemplate(data.universeCurrentVerse);
-        return;
-    }
-
 
     const [loadAsset, { isLoading }] = useLazyQuery(GET_ASSET_PROPS, {
         onError: (e) => setError(e.message),
