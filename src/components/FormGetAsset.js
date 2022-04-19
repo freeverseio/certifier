@@ -15,7 +15,6 @@ function FormGetAsset() {
 
     const [universeVerse, setUniverseVerse] = useState('');
     const [assetId, setAssetId] = useState('');
-    const [universeId, setUniverseId] = useState('0');
     const [assetDataTemplate, setAssetDataTemplate] = useState('');
     const [buttonDisabled, setButtonDisabled] = useState(true);
     const [error, setError] = useState(null);
@@ -26,12 +25,19 @@ function FormGetAsset() {
     }
 
     useEffect(() => {
-        if (assetId !== '' && universeVerse !== '') {
+        if (assetId !== '') {
             setButtonDisabled(false);
         } else {
             setButtonDisabled(true);
         }
-    }, [assetId, universeVerse]);
+    }, [assetId]);
+
+    useEffect(() => {
+        console.log(universeVerse);
+        if (assetId !== '' && universeVerse !== '') {
+            loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})
+        }
+    }, [universeVerse]);
 
     
     // variables: { assetId: '655676227982332778968688736442226131714727085092', universeVerse: 3 },
@@ -65,7 +71,7 @@ function FormGetAsset() {
 
     const [getCurrentVerse, { isVerseLoading }] = useLazyQuery(GET_CURRENT_VERSE, {
         onError: (e) => setError(e.message),
-        onCompleted: showVerse,
+        onCompleted: (data) => setUniverseVerse(data.universeCurrentVerse),
     });
 
     return (
@@ -77,21 +83,21 @@ function FormGetAsset() {
                     }}
                 />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            {/* <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Control required type="universeVerse" placeholder="Enter Universe Idx" data-testid="universeVerse"
                     onChange={(e) => {
                         setUniverseVerse(e.target.value);
                     }} />
-            </Form.Group>
+            </Form.Group> */}
 
-            <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})} data-testid="get-button">
+            {/* <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})} data-testid="get-button">
+                Get Asset Data
+            </Button> */}
+            <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => getCurrentVerse({variables: { universeId: universeIdFromAssetId(assetId).toString() }})} data-testid="get-button">
                 Get Asset Data
             </Button>
-            <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => getCurrentVerse({variables: { universeId: "0".toString() }})} data-testid="get-button">
-                Get Universe
-            </Button>
 
-            {isLoading && <Loading />}
+            {(isLoading || isVerseLoading )&& <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
             {assetDataTemplate !== '' && <AssetDataTemplate assetDataTemplateValue={assetDataTemplate} />}
         </Form>
