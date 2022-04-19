@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { useLazyQuery } from '@apollo/client';
 import { GET_ASSET_PROPS, GET_CURRENT_VERSE } from '../graphql/mutations/asset';
 import Loading from './Loading';
-import AssetDataTemplate from './AssetDataTemplate';
+import InfoTemplate from './InfoTemplate';
 import ErrorDisplay from './ErrorDisplay';
 
 import { splitStrByTrait, encode, universeIdFromAssetId } from '../utils/jsonUtils';
@@ -92,7 +92,7 @@ function FormGetAsset() {
 
             {(isLoading || isVerseLoading )&& <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
-            {assetDataTemplate !== '' && <AssetDataTemplate assetDataTemplateValue={assetDataTemplate} />}
+            {assetDataTemplate !== '' && <InfoTemplate assetDataTemplateValue={assetDataTemplate} />}
         </Form>
     );
 }

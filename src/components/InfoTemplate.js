@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 
-function AssetDataTemplate({assetDataTemplateValue}) {
+function InfoTemplate({assetDataTemplateValue}) {
     return <div className="email-template">
          <Form.Group className="mb-3" controlId="formBasicEmailTemplate">
                     <Form.Control as="textarea" rows={5} readOnly
@@ -12,4 +12,4 @@ function AssetDataTemplate({assetDataTemplateValue}) {
             </Form.Group>
     </div>;
 }
-export default AssetDataTemplate;
+export default InfoTemplate;
