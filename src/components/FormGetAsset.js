@@ -20,6 +20,7 @@ function FormGetAsset() {
     const [traitType, setTraitType] = useState('');
     const [traitVal, setTraitVal] = useState('');
     const [traitValIsNumber, setTraitValIsNumber] = useState(true);
+    const [proof, setProof] = useState('');
     const [assetJsonButtonDisabled, setAssetJsonButtonDisabled] = useState(true);
     const [proofButtonDisabled, setProofButtonDisabled] = useState(true);
     const [error, setError] = useState(null);
@@ -53,9 +54,9 @@ function FormGetAsset() {
         try {
             const propsSplit = splitStrByTrait(propsJson, String(_traitType), val);
             const encoded = encode(propsSplit.preStr, propsSplit.postStr, _props.cid, _props.proof);
-            setAssetJson(encoded);
+            setProof(encoded);
         } catch {
-            setAssetJson('Value not found in the asset properties');
+            setProof('Value not found in the asset properties');
             return
         }
     }
@@ -103,7 +104,7 @@ function FormGetAsset() {
 
             {(isLoading || isVerseLoading )&& <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
-            {assetJson !== '' && <InfoTemplate assetDataTemplateValue={assetJson} />}
+            {assetJson !== '' && <InfoTemplate info={assetJson} />}
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Control required type="traitType" placeholder="Enter Trait Type (e.g. Charisma)" data-testid="trait-type"
                     onChange={(e) => {
@@ -123,6 +124,7 @@ function FormGetAsset() {
             </Button>
             {!traitValIsNumber && <Button onClick={() => setTraitValIsNumber(true)} data-testid="expand-button">String</Button>}
             {traitValIsNumber && <Button onClick={() => setTraitValIsNumber(false)} data-testid="collapse-button">Number</Button>}
+            {proof !== '' && <InfoTemplate info={proof} />}
         </Form>
     );
 }
