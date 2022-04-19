@@ -15,8 +15,13 @@ function FormGetAsset() {
 
     const [universeVerse, setUniverseVerse] = useState('');
     const [assetId, setAssetId] = useState('');
-    const [assetDataTemplate, setAssetDataTemplate] = useState('');
-    const [buttonDisabled, setButtonDisabled] = useState(true);
+    const [assetDataResult, setAssetDataResult] = useState(null);
+    const [assetJson, setAssetJson] = useState('');
+    const [traitType, setTraitType] = useState('');
+    const [traitVal, setTraitVal] = useState('');
+    const [traitValIsNumber, setTraitValIsNumber] = useState(true);
+    const [assetJsonButtonDisabled, setAssetJsonButtonDisabled] = useState(true);
+    const [proofButtonDisabled, setProofButtonDisabled] = useState(true);
     const [error, setError] = useState(null);
 
 
@@ -25,15 +30,15 @@ function FormGetAsset() {
     }
 
     useEffect(() => {
-        if (assetId !== '') {
-            setButtonDisabled(false);
-        } else {
-            setButtonDisabled(true);
-        }
+        setAssetJsonButtonDisabled(assetId === '');
     }, [assetId]);
 
     useEffect(() => {
-        console.log(universeVerse);
+        setProofButtonDisabled(traitType === '' || traitVal === '');
+    }, [traitType, traitVal]);
+
+
+    useEffect(() => {
         if (assetId !== '' && universeVerse !== '') {
             loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})
         }
@@ -41,19 +46,33 @@ function FormGetAsset() {
     
     // variables: { assetId: '655676227982332778968688736442226131714727085092', universeVerse: 3 },
 
+    const buildProof = (_traitType, _traitVal, _isNumber, _props) => {
+        const propsJson = String(_props.props);
+        console.log(propsJson);
+        console.log(_traitType);
+        console.log(_traitVal);
+        const val = _isNumber ? Number(_traitVal) : String(_traitVal);
+        const propsSplit = splitStrByTrait(propsJson, String(_traitType), val);
+        console.log(propsSplit);
+        const encoded = encode(propsSplit.preStr, propsSplit.postStr, _props.cid, _props.proof);
+        setAssetJson(encoded);
+    }
+
     const showData = (data) => {
         const props = data?.propByAssetIdAndUniverseVerse;
         if (props) {
             setError('');
-            const full = props.props;
-            const spl =  splitStrByTrait(full, 'Charisma', 10);
-            const encoded = encode(spl.preStr, spl.postStr, props.cid, props.proof);
+            // const full = props.props;
+            // const spl =  splitStrByTrait(full, 'Charisma', 10);
+            // const encoded = encode(spl.preStr, spl.postStr, props.cid, props.proof);
             // const text = full + ' ' + spl.preStr + ' ' + spl.postStr + ' ' + props.cid + ' ' + props.proof + ' ' + encoded;
             // const text = universeIdFromAssetId(assetId);
-            setAssetDataTemplate(encoded);
+            setAssetJson(props.props);
+            setAssetDataResult(props);
         } else {
             setError('No data found for this asset');
-            setAssetDataTemplate('');
+            setAssetJson('');
+            setAssetDataResult(null);
         }
     }
 
@@ -76,23 +95,32 @@ function FormGetAsset() {
                     }}
                 />
             </Form.Group>
-            {/* <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Control required type="universeVerse" placeholder="Enter Universe Idx" data-testid="universeVerse"
-                    onChange={(e) => {
-                        setUniverseVerse(e.target.value);
-                    }} />
-            </Form.Group> */}
-
-            {/* <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})} data-testid="get-button">
-                Get Asset Data
-            </Button> */}
-            <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => getCurrentVerse({variables: { universeId: universeIdFromAssetId(assetId).toString() }})} data-testid="get-button">
+            <Button variant="primary" disabled={assetJsonButtonDisabled} type="button" onClick={() => getCurrentVerse({variables: { universeId: universeIdFromAssetId(assetId).toString() }})} data-testid="get-button">
                 Get Asset Data
             </Button>
 
             {(isLoading || isVerseLoading )&& <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
-            {assetDataTemplate !== '' && <InfoTemplate assetDataTemplateValue={assetDataTemplate} />}
+            {assetJson !== '' && <InfoTemplate assetDataTemplateValue={assetJson} />}
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Control required type="traitType" placeholder="Enter Trait Type (e.g. Charisma)" data-testid="trait-type"
+                    onChange={(e) => {
+                        setTraitType(e.target.value);
+                    }}
+                />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Control required type="traitVal" placeholder="Enter Trait Value (e.g. 10)" data-testid="trait-val"
+                    onChange={(e) => {
+                        setTraitVal(e.target.value);
+                    }}
+                />
+            </Form.Group>
+            <Button variant="primary" disabled={proofButtonDisabled} type="button" onClick={() => buildProof(traitType, traitVal, traitValIsNumber, assetDataResult)} data-testid="get-button">
+                Get Proof
+            </Button>
+            {!traitValIsNumber && <Button onClick={() => setTraitValIsNumber(true)} data-testid="expand-button">String</Button>}
+            {traitValIsNumber && <Button onClick={() => setTraitValIsNumber(false)} data-testid="collapse-button">Number</Button>}
         </Form>
     );
 }
