@@ -8,6 +8,7 @@ import Loading from './Loading';
 import AssetDataTemplate from './AssetDataTemplate';
 import ErrorDisplay from './ErrorDisplay';
 
+import { splitStrByTrait, encode } from '../utils/jsonUtils';
 
 
 function FormGetAsset() {
@@ -32,13 +33,18 @@ function FormGetAsset() {
     }, [assetId, universeVerse]);
 
     
-    // variables: { assetId: '655676227982332778968688736442226131714727085092', universeVerse: 2 },
+    // variables: { assetId: '655676227982332778968688736442226131714727085092', universeVerse: 3 },
 
     const showData = (data) => {
         const props = data?.propByAssetIdAndUniverseVerse;
         if (props) {
             setError('');
-            setAssetDataTemplate(props.props);
+            const full = props.props;
+            const spl =  splitStrByTrait(full, 'Charisma', 10);
+            const encoded = encode(spl.preStr, spl.postStr, props.cid, props.proof);
+            // const text = full + ' ' + spl.preStr + ' ' + spl.postStr + ' ' + props.cid + ' ' + props.proof + ' ' + encoded;
+            const text = encoded;
+            setAssetDataTemplate(text);
         } else {
             setError('No data found for this asset');
             setAssetDataTemplate('');

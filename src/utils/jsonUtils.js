@@ -1,4 +1,3 @@
-const Abi = require('web3-eth-abi');
 const Utils = require('web3-utils');
 
 function splitStrByTrait(str, traitName, traitValue) {
