@@ -34,8 +34,8 @@ function FormGetAsset() {
     }, [assetId]);
 
     useEffect(() => {
-        setProofButtonDisabled(traitType === '' || traitVal === '');
-    }, [traitType, traitVal]);
+        setProofButtonDisabled(!assetDataResult || traitType === '' || traitVal === '');
+    }, [traitType, traitVal, assetDataResult]);
 
 
     useEffect(() => {
@@ -47,15 +47,17 @@ function FormGetAsset() {
     // variables: { assetId: '655676227982332778968688736442226131714727085092', universeVerse: 3 },
 
     const buildProof = (_traitType, _traitVal, _isNumber, _props) => {
+        setProofButtonDisabled(true);
         const propsJson = String(_props.props);
-        console.log(propsJson);
-        console.log(_traitType);
-        console.log(_traitVal);
         const val = _isNumber ? Number(_traitVal) : String(_traitVal);
-        const propsSplit = splitStrByTrait(propsJson, String(_traitType), val);
-        console.log(propsSplit);
-        const encoded = encode(propsSplit.preStr, propsSplit.postStr, _props.cid, _props.proof);
-        setAssetJson(encoded);
+        try {
+            const propsSplit = splitStrByTrait(propsJson, String(_traitType), val);
+            const encoded = encode(propsSplit.preStr, propsSplit.postStr, _props.cid, _props.proof);
+            setAssetJson(encoded);
+        } catch {
+            setAssetJson('Value not found in the asset properties');
+            return
+        }
     }
 
     const showData = (data) => {
