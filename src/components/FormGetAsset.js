@@ -65,11 +65,6 @@ function FormGetAsset() {
         const props = data?.propByAssetIdAndUniverseVerse;
         if (props) {
             setError('');
-            // const full = props.props;
-            // const spl =  splitStrByTrait(full, 'Charisma', 10);
-            // const encoded = encode(spl.preStr, spl.postStr, props.cid, props.proof);
-            // const text = full + ' ' + spl.preStr + ' ' + spl.postStr + ' ' + props.cid + ' ' + props.proof + ' ' + encoded;
-            // const text = universeIdFromAssetId(assetId);
             setAssetJson(props.props);
             setAssetDataResult(props);
         } else {
