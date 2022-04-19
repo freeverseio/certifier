@@ -49,8 +49,14 @@ function encode(pre, post, cid, proofProps) {
   ))}`;
 }
 
+function universeIdFromAssetId(assetId) {
+  const assetIdBN = new Utils.BN(assetId, 10);
+  return assetIdBN.ishrn(224).toNumber();
+}
+
 module.exports = {
   splitStrByTrait,
   splitStrByKeyVal,
   encode,
+  universeIdFromAssetId,
 };

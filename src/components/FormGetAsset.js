@@ -3,18 +3,19 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useLazyQuery } from '@apollo/client';
-import { GET_INFO } from '../graphql/mutations/asset';
+import { GET_ASSET_PROPS, GET_CURRENT_VERSE } from '../graphql/mutations/asset';
 import Loading from './Loading';
 import AssetDataTemplate from './AssetDataTemplate';
 import ErrorDisplay from './ErrorDisplay';
 
-import { splitStrByTrait, encode } from '../utils/jsonUtils';
+import { splitStrByTrait, encode, universeIdFromAssetId } from '../utils/jsonUtils';
 
 
 function FormGetAsset() {
 
     const [universeVerse, setUniverseVerse] = useState('');
     const [assetId, setAssetId] = useState('');
+    const [universeId, setUniverseId] = useState('0');
     const [assetDataTemplate, setAssetDataTemplate] = useState('');
     const [buttonDisabled, setButtonDisabled] = useState(true);
     const [error, setError] = useState(null);
@@ -42,8 +43,8 @@ function FormGetAsset() {
             const full = props.props;
             const spl =  splitStrByTrait(full, 'Charisma', 10);
             const encoded = encode(spl.preStr, spl.postStr, props.cid, props.proof);
-            // const text = full + ' ' + spl.preStr + ' ' + spl.postStr + ' ' + props.cid + ' ' + props.proof + ' ' + encoded;
-            const text = encoded;
+            const text = full + ' ' + spl.preStr + ' ' + spl.postStr + ' ' + props.cid + ' ' + props.proof + ' ' + encoded;
+            // const text = universeIdFromAssetId(assetId);
             setAssetDataTemplate(text);
         } else {
             setError('No data found for this asset');
@@ -51,9 +52,20 @@ function FormGetAsset() {
         }
     }
 
-    const [loadAsset, { isLoading }] = useLazyQuery(GET_INFO, {
+    const showVerse = (data) => {
+        setAssetDataTemplate(data.universeCurrentVerse);
+        return;
+    }
+
+
+    const [loadAsset, { isLoading }] = useLazyQuery(GET_ASSET_PROPS, {
         onError: (e) => setError(e.message),
         onCompleted: showData,
+    });
+
+    const [getCurrentVerse, { isVerseLoading }] = useLazyQuery(GET_CURRENT_VERSE, {
+        onError: (e) => setError(e.message),
+        onCompleted: showVerse,
     });
 
     return (
@@ -74,6 +86,9 @@ function FormGetAsset() {
 
             <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})} data-testid="get-button">
                 Get Asset Data
+            </Button>
+            <Button variant="primary" disabled={buttonDisabled} type="button" onClick={() => getCurrentVerse({variables: { universeId: "0".toString() }})} data-testid="get-button">
+                Get Universe
             </Button>
 
             {isLoading && <Loading />}
