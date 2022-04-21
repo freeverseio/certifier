@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 
 function Header() {
-    return (<Navbar bg="dark" variant="dark">
+    return (<Navbar className="color-nav" variant="dark">
         <Container>
             <Navbar.Brand href="#home"> <img
                 alt=""
@@ -12,7 +12,7 @@ function Header() {
                 className="d-inline-block align-top"
             /> </Navbar.Brand>
             <Nav>
-                <Nav.Link href="#deets">Get Free NFT</Nav.Link>
+                <Nav.Link href="#deets">Certifier</Nav.Link>
                
             </Nav>
         </Container>
