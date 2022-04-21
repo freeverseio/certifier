@@ -27,6 +27,10 @@ function remove0x(x) {
   return (x.substring(0, 2) === '0x') ? x.substring(2) : x;
 }
 
+function add0x(x) {
+  return (x.substring(0, 2) === '0x') ? x : `0x${x}`;
+}
+
 function encodeLength(x, from) {
   const lenAsBytesArray = Buffer.from(remove0x(x), from).length;
   let hex = remove0x(Utils.toHex(lenAsBytesArray));
@@ -37,15 +41,16 @@ function encodeLength(x, from) {
 }
 
 function encode(pre, post, cid, proofProps) {
+  const proof0x = add0x(proofProps);
   const lengths = encodeLength(pre, 'utf8')
         + encodeLength(post, 'utf8')
         + encodeLength(cid, 'utf8')
-        + encodeLength(proofProps, 'hex');
+        + encodeLength(proof0x, 'hex');
   return `0x${lengths}${remove0x(Utils.encodePacked(
     pre,
     post,
     cid,
-    proofProps,
+    proof0x,
   ))}`;
 }
 
