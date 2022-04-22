@@ -86,16 +86,16 @@ function FormGetAsset() {
 
     return (
         <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Control required type="assetId" placeholder="Enter AssetId" data-testid="assetId"
-                    onChange={(e) => {
-                        setAssetId(e.target.value);
-                    }}
-                />
-            </Form.Group>
-            <Button variant="primary" disabled={assetJsonButtonDisabled} type="button" onClick={() => getCurrentVerse({variables: { universeId: universeIdFromAssetId(assetId).toString() }})} data-testid="get-button">
-                Get Asset Data
-            </Button>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Control required type="assetId" placeholder="Enter AssetId" data-testid="assetId"
+                        onChange={(e) => {
+                            setAssetId(e.target.value);
+                        }}
+                    />
+                </Form.Group>
+                    <Button className="mb-3" variant="primary" disabled={assetJsonButtonDisabled} type="button" onClick={() => getCurrentVerse({variables: { universeId: universeIdFromAssetId(assetId).toString() }})} data-testid="get-button">
+                        Get Asset Data
+                    </Button>
 
             {(isLoading || isVerseLoading )&& <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
