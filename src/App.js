@@ -10,13 +10,9 @@ import {
 } from "@apollo/client";
 
 const client = new ApolloClient({
-  // uri: Config.url,
-  uri: 'http://188.166.169.44:4001/',
+  uri: Config.url,
   cache: new InMemoryCache()
 });
-
-console.log('Config');
-console.log(Config);
 
 function App() {
   return (
