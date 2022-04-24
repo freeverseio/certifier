@@ -1,18 +1,18 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
 import { useLazyQuery } from '@apollo/client';
+import { Table } from 'react-bootstrap';
 import { GET_ASSET_PROPS, GET_CURRENT_VERSE } from '../graphql/mutations/asset';
 import Loading from './Loading';
 import InfoTemplate from './InfoTemplate';
 import ErrorDisplay from './ErrorDisplay';
 
 import { splitStrByTrait, encode, universeIdFromAssetId } from '../utils/jsonUtils';
-import { Table } from 'react-bootstrap';
 
 
 function FormGetAsset() {
@@ -61,7 +61,7 @@ function FormGetAsset() {
             setProof(encoded);
         } catch {
             setProof('Value not found in the asset properties');
-            return
+            
         }
     }
 
@@ -118,52 +118,52 @@ function FormGetAsset() {
             {(isLoading || isVerseLoading )&& <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
             {assetJson !== '' && <InfoTemplate info={assetJson} />}
-
-            <table class="table sm w-auto">
-              <tbody>
-                <tr>
-                    <td >
-                     Prove that the asset has:                 
-                    </td>
-                  <td>
-                    <Form.Group controlId="formBasicEmail">
-                    <Form.Control required type="traitType" placeholder="Enter Trait Type (e.g. Charisma)" data-testid="trait-type"
-                        onChange={(e) => {
-                            setTraitType(e.target.value);
-                        }}
-                    />
-                    </Form.Group>
-                  </td>
-                  <td>
-                    <Form.Group controlId="formBasicEmail">
-                        <Form.Control required type="traitVal" placeholder="Enter Trait Value (e.g. 10)" data-testid="trait-val"
+            {assetJson !== '' && 
+                <>
+                <table className="table sm w-auto">
+                <tbody>
+                    <tr>
+                        <td >
+                        Prove that the asset has:                 
+                        </td>
+                    <td>
+                        <Form.Group controlId="formBasicEmail">
+                        <Form.Control required type="traitType" placeholder="Enter Trait Type (e.g. Charisma)" data-testid="trait-type"
                             onChange={(e) => {
-                                setTraitVal(e.target.value);
+                                setTraitType(e.target.value);
                             }}
                         />
-                    </Form.Group>
-                  </td>
-                  <td>
-                    <DropdownButton
-                        alignRight
-                        title={traitValIsNumber ? 'Number' : 'String'}
-                        id="dropdown-menu-align-right"
-                        onSelect={handleSelect}
-                    >
-                    <Dropdown.Item eventKey="number">Number</Dropdown.Item>
-                    <Dropdown.Item eventKey="string">String</Dropdown.Item>
-                    </DropdownButton>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                        </Form.Group>
+                    </td>
+                    <td>
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Control required type="traitVal" placeholder="Enter Trait Value (e.g. 10)" data-testid="trait-val"
+                                onChange={(e) => {
+                                    setTraitVal(e.target.value);
+                                }}
+                            />
+                        </Form.Group>
+                    </td>
+                    <td>
+                        <DropdownButton
+                            alignRight
+                            title={traitValIsNumber ? 'Number' : 'String'}
+                            id="dropdown-menu-align-right"
+                            onSelect={handleSelect}
+                        >
+                        <Dropdown.Item eventKey="number">Number</Dropdown.Item>
+                        <Dropdown.Item eventKey="string">String</Dropdown.Item>
+                        </DropdownButton>
+                    </td>
+                    </tr>
+                </tbody>
+                </table>
 
-
-
-            <Button variant="primary" disabled={proofButtonDisabled} type="button" onClick={() => buildProof(traitType, traitVal, traitValIsNumber, assetDataResult)} data-testid="get-button">
-                Get Proof
-            </Button>
-            {proof !== '' && <InfoTemplate info={proof} />}
+                <Button variant="primary" disabled={proofButtonDisabled} type="button" onClick={() => buildProof(traitType, traitVal, traitValIsNumber, assetDataResult)} data-testid="get-button">
+                    Get Proof
+                </Button>
+                {proof !== '' && <InfoTemplate info={proof} />}
+                </>}
         </Form>
     );
 }
