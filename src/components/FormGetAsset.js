@@ -2,6 +2,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+
 import { useLazyQuery } from '@apollo/client';
 import { GET_ASSET_PROPS, GET_CURRENT_VERSE } from '../graphql/mutations/asset';
 import Loading from './Loading';
@@ -36,7 +39,7 @@ function FormGetAsset() {
 
     useEffect(() => {
         setProofButtonDisabled(!assetDataResult || traitType === '' || traitVal === '');
-    }, [traitType, traitVal, assetDataResult]);
+    }, [traitType, traitVal, assetDataResult, traitValIsNumber]);
 
 
     useEffect(() => {
@@ -84,6 +87,10 @@ function FormGetAsset() {
         onCompleted: (data) => setUniverseVerse(data.universeCurrentVerse),
     });
 
+    const handleSelect=(e)=>{
+        setTraitValIsNumber(e === 'number');
+      }
+
     return (
         <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -117,8 +124,15 @@ function FormGetAsset() {
             <Button variant="primary" disabled={proofButtonDisabled} type="button" onClick={() => buildProof(traitType, traitVal, traitValIsNumber, assetDataResult)} data-testid="get-button">
                 Get Proof
             </Button>
-            {!traitValIsNumber && <Button onClick={() => setTraitValIsNumber(true)} data-testid="expand-button">String</Button>}
-            {traitValIsNumber && <Button onClick={() => setTraitValIsNumber(false)} data-testid="collapse-button">Number</Button>}
+            <DropdownButton
+            alignRight
+            title={traitValIsNumber ? 'Number' : 'String'}
+            id="dropdown-menu-align-right"
+            onSelect={handleSelect}
+                >
+              <Dropdown.Item eventKey="number">Number</Dropdown.Item>
+              <Dropdown.Item eventKey="string">String</Dropdown.Item>
+            </DropdownButton>
             {proof !== '' && <InfoTemplate info={proof} />}
         </Form>
     );
