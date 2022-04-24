@@ -41,14 +41,7 @@ function FormGetAsset() {
     useEffect(() => {
         setProofButtonDisabled(!assetDataResult || traitType === '' || traitVal === '');
     }, [traitType, traitVal, assetDataResult, traitValIsNumber]);
-
-
-    useEffect(() => {
-        if (assetId !== '' && universeVerse !== '') {
-            loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})
-        }
-    }, [universeVerse]);
-    
+   
     // variables: { assetId: '655676227982332778968688736442226131714727085092', universeVerse: 3 },
 
     const buildProof = (_traitType, _traitVal, _isNumber, _props) => {
@@ -68,6 +61,7 @@ function FormGetAsset() {
         const props = data?.propByAssetIdAndUniverseVerse;
         if (props) {
             setError('');
+            // eslint-disable-next-line react/prop-types
             setAssetJson(props.props);
             setAssetDataResult(props);
         } else {
@@ -90,6 +84,12 @@ function FormGetAsset() {
     const handleSelect=(e)=>{
         setTraitValIsNumber(e === 'number');
       }
+
+    useEffect(() => {
+        if (assetId !== '' && universeVerse !== '') {
+            loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})
+        }
+    }, [universeVerse]);
 
     return (
         <Form>
