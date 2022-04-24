@@ -94,31 +94,43 @@ function FormGetAsset() {
 
     return (
         <Form>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Control required type="assetId" placeholder="Enter AssetId" data-testid="assetId"
-                        onChange={(e) => {
-                            setAssetId(e.target.value);
-                        }}
-                    />
-                </Form.Group>
-                    <Button className="mb-3" variant="primary" disabled={assetJsonButtonDisabled} type="button" onClick={() => getCurrentVerse({variables: { universeId: universeIdFromAssetId(assetId).toString() }})} data-testid="get-button">
-                        Get Asset Data
-                    </Button>
+            <Table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                <Form.Control required type="assetId" placeholder="Enter AssetId" data-testid="assetId"
+                                    onChange={(e) => {
+                                        setAssetId(e.target.value);
+                                    }}
+                                />
+                            </Form.Group>
+                        </td>
+                        <td>
+                            <Button className="mb-3" variant="primary" disabled={assetJsonButtonDisabled} type="button" onClick={() => getCurrentVerse({variables: { universeId: universeIdFromAssetId(assetId).toString() }})} data-testid="get-button">
+                                Get Asset Data
+                            </Button>
+                        </td>
+                    </tr>
+                </tbody>
+            </Table>
 
             {(isLoading || isVerseLoading )&& <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
             {assetJson !== '' && <InfoTemplate info={assetJson} />}
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Control required type="traitType" placeholder="Enter Trait Type (e.g. Charisma)" data-testid="trait-type"
-                    onChange={(e) => {
-                        setTraitType(e.target.value);
-                    }}
-                />
-            </Form.Group>
 
             <Table>
               <tbody>
                 <tr>
+                  <td>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Control required type="traitType" placeholder="Enter Trait Type (e.g. Charisma)" data-testid="trait-type"
+                        onChange={(e) => {
+                            setTraitType(e.target.value);
+                        }}
+                    />
+                    </Form.Group>
+                  </td>
                   <td>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Control required type="traitVal" placeholder="Enter Trait Value (e.g. 10)" data-testid="trait-val"
