@@ -1,4 +1,4 @@
-
+/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -119,49 +119,49 @@ function FormGetAsset() {
             {assetJson !== '' && <InfoTemplate info={assetJson} />}
             {assetJson !== '' && 
                 <>
-                <table className="table sm w-auto">
-                <tbody>
-                    <tr>
-                        <td >
-                        Prove that the asset has:                 
-                        </td>
-                    <td>
-                        <Form.Group controlId="formBasicEmail">
-                        <Form.Control required type="traitType" placeholder="Enter Trait Type (e.g. Charisma)" data-testid="trait-type"
+                    <table className="table sm w-auto">
+                        <tbody>
+                            <tr>
+                                <td >
+                                    Prove that the asset has:                 
+                                </td>
+                                <td>
+                                    <Form.Group controlId="formBasicEmail">
+                                        <Form.Control required type="traitType" placeholder="Enter Trait Type (e.g. Charisma)" data-testid="trait-type"
                             onChange={(e) => {
                                 setTraitType(e.target.value);
                             }}
                         />
-                        </Form.Group>
-                    </td>
-                    <td>
-                        <Form.Group controlId="formBasicEmail">
-                            <Form.Control required type="traitVal" placeholder="Enter Trait Value (e.g. 10)" data-testid="trait-val"
+                                    </Form.Group>
+                                </td>
+                                <td>
+                                    <Form.Group controlId="formBasicEmail">
+                                        <Form.Control required type="traitVal" placeholder="Enter Trait Value (e.g. 10)" data-testid="trait-val"
                                 onChange={(e) => {
                                     setTraitVal(e.target.value);
                                 }}
                             />
-                        </Form.Group>
-                    </td>
-                    <td>
-                        <DropdownButton
+                                    </Form.Group>
+                                </td>
+                                <td>
+                                    <DropdownButton
                             alignRight
                             title={traitValIsNumber ? 'Number' : 'String'}
                             id="dropdown-menu-align-right"
                             onSelect={handleSelect}
                         >
-                        <Dropdown.Item eventKey="number">Number</Dropdown.Item>
-                        <Dropdown.Item eventKey="string">String</Dropdown.Item>
-                        </DropdownButton>
-                    </td>
-                    </tr>
-                </tbody>
-                </table>
+                                        <Dropdown.Item eventKey="number">Number</Dropdown.Item>
+                                        <Dropdown.Item eventKey="string">String</Dropdown.Item>
+                                    </DropdownButton>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                <Button variant="primary" disabled={proofButtonDisabled} type="button" onClick={() => buildProof(traitType, traitVal, traitValIsNumber, assetDataResult)} data-testid="get-button">
-                    Get Proof
-                </Button>
-                {proof !== '' && <InfoTemplate info={proof} />}
+                    <Button variant="primary" disabled={proofButtonDisabled} type="button" onClick={() => buildProof(traitType, traitVal, traitValIsNumber, assetDataResult)} data-testid="get-button">
+                        Get Proof
+                    </Button>
+                    {proof !== '' && <InfoTemplate info={proof} />}
                 </>}
         </Form>
     );
