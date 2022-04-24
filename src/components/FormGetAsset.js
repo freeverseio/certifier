@@ -119,11 +119,14 @@ function FormGetAsset() {
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
             {assetJson !== '' && <InfoTemplate info={assetJson} />}
 
-            <Table>
+            <table class="table sm w-auto">
               <tbody>
                 <tr>
+                    <td >
+                     Prove that the asset has:                 
+                    </td>
                   <td>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Group controlId="formBasicEmail">
                     <Form.Control required type="traitType" placeholder="Enter Trait Type (e.g. Charisma)" data-testid="trait-type"
                         onChange={(e) => {
                             setTraitType(e.target.value);
@@ -153,7 +156,7 @@ function FormGetAsset() {
                   </td>
                 </tr>
               </tbody>
-            </Table>
+            </table>
 
 
 
