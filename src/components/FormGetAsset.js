@@ -12,6 +12,7 @@ import InfoTemplate from './InfoTemplate';
 import ErrorDisplay from './ErrorDisplay';
 
 import { splitStrByTrait, encode, universeIdFromAssetId } from '../utils/jsonUtils';
+import { Table } from 'react-bootstrap';
 
 
 function FormGetAsset() {
@@ -114,25 +115,39 @@ function FormGetAsset() {
                     }}
                 />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Control required type="traitVal" placeholder="Enter Trait Value (e.g. 10)" data-testid="trait-val"
-                    onChange={(e) => {
-                        setTraitVal(e.target.value);
-                    }}
-                />
-            </Form.Group>
+
+            <Table>
+              <tbody>
+                <tr>
+                  <td>
+                    <Form.Group controlId="formBasicEmail">
+                        <Form.Control required type="traitVal" placeholder="Enter Trait Value (e.g. 10)" data-testid="trait-val"
+                            onChange={(e) => {
+                                setTraitVal(e.target.value);
+                            }}
+                        />
+                    </Form.Group>
+                  </td>
+                  <td>
+                    <DropdownButton
+                        alignRight
+                        title={traitValIsNumber ? 'Number' : 'String'}
+                        id="dropdown-menu-align-right"
+                        onSelect={handleSelect}
+                    >
+                    <Dropdown.Item eventKey="number">Number</Dropdown.Item>
+                    <Dropdown.Item eventKey="string">String</Dropdown.Item>
+                    </DropdownButton>
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+
+
+
             <Button variant="primary" disabled={proofButtonDisabled} type="button" onClick={() => buildProof(traitType, traitVal, traitValIsNumber, assetDataResult)} data-testid="get-button">
                 Get Proof
             </Button>
-            <DropdownButton
-            alignRight
-            title={traitValIsNumber ? 'Number' : 'String'}
-            id="dropdown-menu-align-right"
-            onSelect={handleSelect}
-                >
-              <Dropdown.Item eventKey="number">Number</Dropdown.Item>
-              <Dropdown.Item eventKey="string">String</Dropdown.Item>
-            </DropdownButton>
             {proof !== '' && <InfoTemplate info={proof} />}
         </Form>
     );
