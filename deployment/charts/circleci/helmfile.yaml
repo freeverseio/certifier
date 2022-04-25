@@ -1,0 +1,6 @@
+releases:
+  - name: certifier-circleci
+    installed: true
+    chart: .
+    wait: true
+    namespace: certifier
