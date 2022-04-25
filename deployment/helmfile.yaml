@@ -1,0 +1,23 @@
+repositories:
+    - name: stable
+      url: https://charts.helm.sh/stable
+
+environments:
+  default:
+    values:
+    - ./environments/dev/values.yaml
+  development:
+    values:
+    - ./environments/dev/values.yaml
+  staging:
+    values:
+    - ./environments/staging/values.yaml
+
+helmfiles:
+  - path: "charts/circleci/helmfile.yaml"
+  - path: "charts/certifier/helmfile.yaml"
+    values:
+    - certifierFrontHost: {{ .Values.certifierFrontHost }}
+    - apiUrl: {{ .Values.freeverseApi }}
+    - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
+    - contract: {{ .Values.contract }}

@@ -1,0 +1,8 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: certifier-secrets-mgmt
+rules:
+- apiGroups: ["", "apps"] # "" indicates the core API group
+  resources: ["secrets", "namespaces", "services", "statefulsets", "deployments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]

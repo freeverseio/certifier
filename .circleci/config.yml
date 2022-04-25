@@ -1,0 +1,84 @@
+version: 2.1
+
+orbs:
+  kube-orb: circleci/kubernetes@0.11.0
+  helm: circleci/helm@1.2.0
+
+commands:
+  install-helmfile:
+    steps:
+      - run: |
+          helm plugin install https://github.com/databus23/helm-diff
+          URL=https://github.com/roboll/helmfile/releases/download/v0.139.9/helmfile_linux_amd64
+          curl -L -o helmfile $URL
+          [ -w /usr/local/bin ] && SUDO="" || SUDO=sudo
+          $SUDO chmod +x ./helmfile
+          $SUDO mv ./helmfile /usr/local/bin
+  dockerize-and-push:
+    parameters:
+      image:
+        type: string
+    steps:
+      - run: echo $DOCKER_PASSWD | docker login -u $DOCKER_ID --password-stdin
+      - run: |
+          docker build --build-arg VERSION=$CIRCLE_SHA1 -t << parameters.image >>:$CIRCLE_SHA1 .
+          docker push << parameters.image >>:$CIRCLE_SHA1
+          if [[ -v CIRCLE_TAG ]]; then
+            docker build -t << parameters.image >>:$CIRCLE_TAG .
+            docker push << parameters.image >>:$CIRCLE_TAG
+          fi
+
+jobs:
+  frontend:
+    docker:
+      - image: cimg/node:lts
+    steps:
+      - checkout
+      - run: npm ci && npm test
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - dockerize-and-push:
+          image: freeverseio/killerdemo_certifier
+  deployment_test:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - checkout
+      - helm/install-helm-client:
+          version: v3.6.2
+          stable-repo-url: https://charts.helm.sh/stable
+      - install-helmfile
+      - run: |
+          cd deployment/
+          helmfile lint
+  deploy-dev:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - kube-orb/install-kubectl:
+          kubectl-version: "v1.16.12"
+      - kube-orb/install-kubeconfig:
+          kubeconfig: KUBECONFIG_DATA
+      - checkout
+      - helm/install-helm-client:
+          version: v3.6.2
+          stable-repo-url: https://charts.helm.sh/stable
+      - install-helmfile
+      - run: |
+          cd deployment/
+          helmfile --environment development apply
+
+workflows:
+  build-test-dockerize:
+    jobs:
+      - frontend:
+          context: dockerhub
+      - deployment_test
+      - deploy-dev:
+          filters:
+            branches:
+              only:
+                - develop
+          requires:
+            - deployment_test
+            - frontend

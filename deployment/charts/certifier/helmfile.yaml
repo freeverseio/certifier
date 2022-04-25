@@ -1,0 +1,12 @@
+releases:
+
+    - name: certifier-front-release
+      namespace: certifier
+      installed: true
+      chart: .
+      values:
+        - certifierFrontHost: {{ .Values.certifierFrontHost }}
+        - apiUrl: {{ .Values.apiUrl }}
+        - imageTag: {{ .Values.imageTag }}
+        - contract: {{ .Values.contract }}
+        - environmentName: {{ .Environment.Name }}

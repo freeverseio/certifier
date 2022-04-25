@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: certifier-front
+  labels:
+    app.kubernetes.io/app: certifier-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/app: certifier-front
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/app: certifier-front
+    spec:
+      containers:
+      - name: certifier-front
+        image: freeverseio/killerdemo_certifier:{{ .Values.imageTag }}
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "250m"
+        imagePullPolicy: Always
+        env:
+        - name: REACT_APP_API
+          value: {{ .Values.apiUrl }}
+        - name: REACT_APP_CONTRACT
+          value: {{ .Values.contract }}
+        - name: REACT_APP_ENV
+          value: {{ .Values.environmentName }}      
+      imagePullSecrets:
+      - name: docker-secret
