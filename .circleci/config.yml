@@ -38,7 +38,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - dockerize-and-push:
-          image: freeverseio/certifier
+          image: freeverseio/killerdemo_certifier
   deployment_test:
     docker:
       - image: cimg/base:2020.01

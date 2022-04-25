@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: certifier-front
-        image: freeverseio/certifier:{{ .Values.imageTag }}
+        image: freeverseio/killerdemo_certifier:{{ .Values.imageTag }}
         resources:
           requests:
             memory: "128Mi"

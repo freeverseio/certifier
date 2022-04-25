@@ -9,7 +9,6 @@ metadata:
     nginx.ingress.kubernetes.io/auth-tls-error-page: "http://www.mysite.com/error-cert.html"
     nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
     cert-manager.io/cluster-issuer: letsencrypt-freeverse
-    external-dns.alpha.kubernetes.io/hostname: theprepco.gorengine.com
 
 spec:
   tls:

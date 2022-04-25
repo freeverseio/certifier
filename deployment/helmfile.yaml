@@ -15,7 +15,7 @@ environments:
 
 helmfiles:
   - path: "charts/circleci/helmfile.yaml"
-  - path: "charts/get-free-nft-front/helmfile.yaml"
+  - path: "charts/certifier/helmfile.yaml"
     values:
     - certifierFrontHost: {{ .Values.certifierFrontHost }}
     - apiUrl: {{ .Values.freeverseApi }}
