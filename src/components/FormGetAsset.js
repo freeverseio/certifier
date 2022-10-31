@@ -58,7 +58,8 @@ function FormGetAsset() {
     }
 
     const showData = (data) => {
-        const props = data?.propByAssetIdAndUniverseVerse;
+        console.log("DATA:: ", data);
+        const props = data?.assetPropsById;
         if (props) {
             setError('');
             // eslint-disable-next-line react/prop-types
@@ -78,7 +79,7 @@ function FormGetAsset() {
 
     const [getCurrentVerse, { isVerseLoading }] = useLazyQuery(GET_CURRENT_VERSE, {
         onError: (e) => setError(e.message),
-        onCompleted: (data) => setUniverseVerse(data.universeCurrentVerse),
+        onCompleted: (data) => setUniverseVerse(data.assetPropsById.verse)
     });
 
     const handleSelect=(e)=>{
@@ -106,7 +107,7 @@ function FormGetAsset() {
                             </Form.Group>
                         </td>
                         <td>
-                            <Button className="mb-3" variant="primary" disabled={assetJsonButtonDisabled} type="button" onClick={() => getCurrentVerse({variables: { universeId: universeIdFromAssetId(assetId).toString() }})} data-testid="get-button">
+                            <Button className="mb-3" variant="primary" disabled={assetJsonButtonDisabled} type="button" onClick={() => getCurrentVerse({variables: { assetId: universeIdFromAssetId(assetId).toString() }})} data-testid="get-button">
                                 Get Asset Data
                             </Button>
                         </td>
