@@ -58,7 +58,6 @@ function FormGetAsset() {
     }
 
     const showData = (data) => {
-        console.log("DATA:: ", data);
         const props = data?.assetPropsById;
         if (props) {
             setError('');
