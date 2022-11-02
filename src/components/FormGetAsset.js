@@ -7,7 +7,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 
 import { useLazyQuery } from '@apollo/client';
 import { Table } from 'react-bootstrap';
-import { GET_ASSET_PROPS, GET_CURRENT_VERSE } from '../graphql/mutations/asset';
+import { GET_ASSET_PROPS } from '../graphql/mutations/asset';
 import Loading from './Loading';
 import InfoTemplate from './InfoTemplate';
 import ErrorDisplay from './ErrorDisplay';
@@ -17,7 +17,6 @@ import { splitStrByTrait, encode, universeIdFromAssetId } from '../utils/jsonUti
 
 function FormGetAsset() {
 
-    const [universeVerse, setUniverseVerse] = useState('');
     const [assetId, setAssetId] = useState('');
     const [assetDataResult, setAssetDataResult] = useState(null);
     const [assetJson, setAssetJson] = useState('');
@@ -76,20 +75,9 @@ function FormGetAsset() {
         onCompleted: showData,
     });
 
-    const [getCurrentVerse, { isVerseLoading }] = useLazyQuery(GET_CURRENT_VERSE, {
-        onError: (e) => setError(e.message),
-        onCompleted: (data) => setUniverseVerse(data.assetPropsById.verse)
-    });
-
     const handleSelect=(e)=>{
         setTraitValIsNumber(e === 'number');
       }
-
-    useEffect(() => {
-        if (assetId !== '' && universeVerse !== '') {
-            loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})
-        }
-    }, [universeVerse]);
 
     return (
         <Form>
@@ -106,7 +94,7 @@ function FormGetAsset() {
                             </Form.Group>
                         </td>
                         <td>
-                            <Button className="mb-3" variant="primary" disabled={assetJsonButtonDisabled} type="button" onClick={() => getCurrentVerse({variables: { assetId: universeIdFromAssetId(assetId).toString() }})} data-testid="get-button">
+                            <Button className="mb-3" variant="primary" disabled={assetJsonButtonDisabled} type="button" onClick={() => loadAsset({variables: { assetId: assetId.toString() }})} data-testid="get-button">
                                 Get Asset Data
                             </Button>
                         </td>
@@ -114,7 +102,7 @@ function FormGetAsset() {
                 </tbody>
             </Table>
 
-            {(isLoading || isVerseLoading )&& <Loading />}
+            {(isLoading )&& <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
             {assetJson !== '' && <InfoTemplate info={assetJson} />}
             {assetJson !== '' && 
