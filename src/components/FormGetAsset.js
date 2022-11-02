@@ -12,7 +12,7 @@ import Loading from './Loading';
 import InfoTemplate from './InfoTemplate';
 import ErrorDisplay from './ErrorDisplay';
 
-import { splitStrByTrait, encode, universeIdFromAssetId } from '../utils/jsonUtils';
+import { splitStrByTrait, encode } from '../utils/jsonUtils';
 
 
 function FormGetAsset() {
@@ -41,7 +41,7 @@ function FormGetAsset() {
         setProofButtonDisabled(!assetDataResult || traitType === '' || traitVal === '');
     }, [traitType, traitVal, assetDataResult, traitValIsNumber]);
    
-    // variables: { assetId: '655676227982332778968688736442226131714727085092', universeVerse: 3 },
+    // variables: { assetId: '655676227982332778968688736442226131714727085092' },
 
     const buildProof = (_traitType, _traitVal, _isNumber, _props) => {
         setProofButtonDisabled(true);
