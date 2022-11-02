@@ -7,17 +7,16 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 
 import { useLazyQuery } from '@apollo/client';
 import { Table } from 'react-bootstrap';
-import { GET_ASSET_PROPS, GET_CURRENT_VERSE } from '../graphql/mutations/asset';
+import { GET_ASSET_PROPS } from '../graphql/mutations/asset';
 import Loading from './Loading';
 import InfoTemplate from './InfoTemplate';
 import ErrorDisplay from './ErrorDisplay';
 
-import { splitStrByTrait, encode, universeIdFromAssetId } from '../utils/jsonUtils';
+import { splitStrByTrait, encode } from '../utils/jsonUtils';
 
 
 function FormGetAsset() {
 
-    const [universeVerse, setUniverseVerse] = useState('');
     const [assetId, setAssetId] = useState('');
     const [assetDataResult, setAssetDataResult] = useState(null);
     const [assetJson, setAssetJson] = useState('');
@@ -42,7 +41,7 @@ function FormGetAsset() {
         setProofButtonDisabled(!assetDataResult || traitType === '' || traitVal === '');
     }, [traitType, traitVal, assetDataResult, traitValIsNumber]);
    
-    // variables: { assetId: '655676227982332778968688736442226131714727085092', universeVerse: 3 },
+    // variables: { assetId: '655676227982332778968688736442226131714727085092' },
 
     const buildProof = (_traitType, _traitVal, _isNumber, _props) => {
         setProofButtonDisabled(true);
@@ -58,7 +57,7 @@ function FormGetAsset() {
     }
 
     const showData = (data) => {
-        const props = data?.propByAssetIdAndUniverseVerse;
+        const props = data?.assetPropsById;
         if (props) {
             setError('');
             // eslint-disable-next-line react/prop-types
@@ -76,20 +75,9 @@ function FormGetAsset() {
         onCompleted: showData,
     });
 
-    const [getCurrentVerse, { isVerseLoading }] = useLazyQuery(GET_CURRENT_VERSE, {
-        onError: (e) => setError(e.message),
-        onCompleted: (data) => setUniverseVerse(data.universeCurrentVerse),
-    });
-
     const handleSelect=(e)=>{
         setTraitValIsNumber(e === 'number');
       }
-
-    useEffect(() => {
-        if (assetId !== '' && universeVerse !== '') {
-            loadAsset({variables: { assetId: assetId.toString(), universeVerse: Number(universeVerse) }})
-        }
-    }, [universeVerse]);
 
     return (
         <Form>
@@ -106,7 +94,7 @@ function FormGetAsset() {
                             </Form.Group>
                         </td>
                         <td>
-                            <Button className="mb-3" variant="primary" disabled={assetJsonButtonDisabled} type="button" onClick={() => getCurrentVerse({variables: { universeId: universeIdFromAssetId(assetId).toString() }})} data-testid="get-button">
+                            <Button className="mb-3" variant="primary" disabled={assetJsonButtonDisabled} type="button" onClick={() => loadAsset({variables: { assetId: assetId.toString() }})} data-testid="get-button">
                                 Get Asset Data
                             </Button>
                         </td>
@@ -114,7 +102,7 @@ function FormGetAsset() {
                 </tbody>
             </Table>
 
-            {(isLoading || isVerseLoading )&& <Loading />}
+            {(isLoading )&& <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
             {assetJson !== '' && <InfoTemplate info={assetJson} />}
             {assetJson !== '' && 
