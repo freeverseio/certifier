@@ -24,6 +24,7 @@ function FormGetAsset() {
     const [traitVal, setTraitVal] = useState('');
     const [traitValIsNumber, setTraitValIsNumber] = useState(true);
     const [proof, setProof] = useState('');
+    const [cid, setCid] = useState("");
     const [assetJsonButtonDisabled, setAssetJsonButtonDisabled] = useState(true);
     const [proofButtonDisabled, setProofButtonDisabled] = useState(true);
     const [error, setError] = useState(null);
@@ -63,6 +64,7 @@ function FormGetAsset() {
             // eslint-disable-next-line react/prop-types
             setAssetJson(props.props);
             setAssetDataResult(props);
+            setCid(props.cid);
         } else {
             setError('No data found for this asset');
             setAssetJson('');
@@ -104,6 +106,21 @@ function FormGetAsset() {
 
             {(isLoading )&& <Loading />}
             {error && <ErrorDisplay errorText={error} onCloseFunct={closeErrorMessage} />}
+            {cid !== "" && (
+              <table className="table sm w-auto">
+                <tbody>
+                  <tr>
+                    <td>Asset CID:</td>
+                    <a
+                      href={`https://freeverse.mypinata.cloud/ipfs/${cid}`}
+                      target="_blank"
+                    >
+                      <td>ipfs://{cid}</td>
+                    </a>
+                  </tr>
+                </tbody>
+              </table>
+            )}
             {assetJson !== '' && <InfoTemplate info={assetJson} />}
             {assetJson !== '' && 
                 <>
