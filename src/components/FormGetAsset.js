@@ -24,7 +24,7 @@ function FormGetAsset() {
     const [traitVal, setTraitVal] = useState('');
     const [traitValIsNumber, setTraitValIsNumber] = useState(true);
     const [proof, setProof] = useState('');
-    const [cid, setCid] = useState("");
+    const [cid, setCid] = useState('');
     const [assetJsonButtonDisabled, setAssetJsonButtonDisabled] = useState(true);
     const [proofButtonDisabled, setProofButtonDisabled] = useState(true);
     const [error, setError] = useState(null);
